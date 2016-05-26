@@ -10,14 +10,14 @@
 
 @interface WaveAnimationView ()
 @property (nonatomic,strong) CAShapeLayer *curLayer;
-@property (nonatomic,strong) NSTimer      *timer;
 
 @property (nonatomic)       NSInteger     oldWaveCount;
 
-//在这个线程中重新画图和给waveCount赋值
-@property (nonatomic,strong) NSThread     *reDrawThread;
 
+@property (nonatomic)       BOOL           isManualStop;
 
+//测试用，产生数据的定时器，要删除
+@property (nonatomic,strong)    NSTimer     *generateTimer;
 @end
 
 @implementation WaveAnimationView
@@ -35,48 +35,49 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
+        _drawColor = [UIColor whiteColor];
+        _lineWidth = 3.;
         self.curLayer = [CAShapeLayer layer];
-        self.curLayer.strokeColor = [UIColor whiteColor].CGColor;
+        self.curLayer.strokeColor = _drawColor.CGColor;
         self.curLayer.fillColor = nil;
         self.curLayer.lineDashPattern = @[@(frame.size.width-10),@10];
-        self.curLayer.lineWidth = 3.;
-        
-        UIBezierPath *path = [UIBezierPath bezierPath];
-        [path moveToPoint:CGPointMake(-frame.size.width, frame.size.height/2.)];
-        [path addLineToPoint:CGPointMake(frame.size.width, frame.size.height/2.)];
-        self.curLayer.path = path.CGPath;
+        self.curLayer.lineWidth = _lineWidth;
+        self.curLayer.lineJoin = kCALineJoinRound;
+        self.curLayer.lineCap = kCALineJoinRound;
         [self.layer addSublayer:self.curLayer];
-        [self animation];
         
-        self.reDrawThread = [[NSThread alloc] initWithTarget:self selector:@selector(setUp) object:nil];
-        [self.reDrawThread start];
+//        UIBezierPath *path = [UIBezierPath bezierPath];
+//        [path moveToPoint:CGPointMake(-frame.size.width, frame.size.height/2.)];
+//        [path addLineToPoint:CGPointMake(frame.size.width, frame.size.height/2.)];
+//        self.curLayer.path = path.CGPath;
+//        [self.layer addSublayer:self.curLayer];
+//        [self animation];
+        _sema = dispatch_semaphore_create(1);
+        
+       self.generateTimer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(generateData) userInfo:nil repeats:YES];
        
     }
     return self;
 }
--(void)setUp{
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(draw:) userInfo:nil repeats:YES];
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(generateData) userInfo:nil repeats:YES];
-    _sema = dispatch_semaphore_create(1);
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:self.timer forMode:NSRunLoopCommonModes];
-    [runLoop addTimer:timer forMode:NSRunLoopCommonModes];
-    [runLoop run];
+
+-(void)startAnimation{
+    [self draw];
+    [self animation];
 }
 -(void)animation{
+    [self.curLayer removeAllAnimations];
     CABasicAnimation *animation = [CABasicAnimation animation];
     animation.keyPath = @"position.x";
     animation.byValue = @(self.frame.size.width);
     animation.duration = 5;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     animation.removedOnCompletion = NO;
-//    animation.fillMode = kCAFillModeForwards;
+    animation.fillMode = kCAFillModeForwards;
     animation.delegate = self;
-    animation.repeatCount = NSIntegerMax;
     [self.curLayer addAnimation:animation forKey:@"animation"];
 }
 #define kHGap 20
--(void)draw:(NSTimer *)timer{
+-(void)draw{
     dispatch_semaphore_wait(_sema, 60);
         UIBezierPath *path = [UIBezierPath bezierPath];
         self.curLayer.path = nil;
@@ -246,29 +247,50 @@
 
 -(void)generateData{
     //产生输入测试
-    if (arc4random()%10 < 5) {
-        self.waveCount = 0 ;
-    }else{
+//    if (arc4random()%10 < 5) {
+//        self.waveCount = 0 ;
+//    }else{
         self.waveCount = arc4random()%6;
-    }
+//    }
 }
--(void)setWaveCount:(NSInteger)waveCount{
-    [self performSelector:@selector(setWaveCountOnThread:) onThread:self.reDrawThread withObject:@(waveCount) waitUntilDone:YES];
-}
--(void)setWaveCountOnThread:(id)count{
-    dispatch_semaphore_wait(_sema, 60);
-    _waveCount = 3;//[(NSNumber *)count integerValue];
-    dispatch_semaphore_signal(_sema);
-}
+
+
 
 //先给外部提供停止函数？
 -(void)dealloc{
-    [self.reDrawThread cancel];
+    NSLog(@"%@ dealloc",[self class]);
 }
--(void)animationDidStart:(CAAnimation *)anim{
-    NSLog(@"xxx");
-}
+
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
-    self.curLayer.path = nil;
+    if (self.isManualStop) {
+        return;
+    }
+    [self draw];
+    [self animation];
+}
+
+-(void)stopAnimation{
+    if (self.generateTimer) {
+        [self.generateTimer invalidate];
+    }
+    self.isManualStop = YES;
+    [self.curLayer removeAllAnimations];
+}
+
+#pragma mark - setMethod
+-(void)setWaveCount:(NSInteger)waveCount{
+    dispatch_semaphore_wait(_sema, 60);
+    _waveCount = waveCount;
+    dispatch_semaphore_signal(_sema);
+}
+
+-(void)setDrawColor:(UIColor *)drawColor{
+    _drawColor = drawColor;
+    self.curLayer.strokeColor = _drawColor.CGColor;
+}
+
+-(void)setLineWidth:(CGFloat)lineWidth{
+    _lineWidth = lineWidth;
+    self.curLayer.lineWidth = _lineWidth;
 }
 @end

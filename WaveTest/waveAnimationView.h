@@ -16,4 +16,19 @@ typedef NS_ENUM(NSInteger,WaveType) {
 @interface WaveAnimationView : UIView
 @property (nonatomic) NSInteger waveCount;
 @property (nonatomic) WaveType type;
+/**
+ *  默认白色
+ */
+@property (nonatomic,strong) UIColor    *drawColor;
+
+/**
+ *  默认3
+ */
+@property (nonatomic)        CGFloat    lineWidth;
+
+-(void)startAnimation;
+/**
+ *  必须调用它，才能保证view被销毁 如在VC的dealloc方法中调用它，
+ */
+-(void)stopAnimation;
 @end

@@ -17,10 +17,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    self.waveView = [[WaveAnimationView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.,
-                                                                        200, self.view.bounds.size.width/2., 200)];
+    self.waveView = [[WaveAnimationView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.-100,
+                                                                        200, self.view.bounds.size.width/2.+100, 200)];
+    self.waveView.drawColor = [UIColor blueColor];
     self.waveView.backgroundColor = [UIColor redColor];
     [self.view addSubview:self.waveView];
+    self.view.backgroundColor = [UIColor grayColor];
+    
+    self.waveView.type = WaveTypeSawtooth;
+    [self.waveView startAnimation];
     self.waveView.layer.masksToBounds = YES; 
     
 }
@@ -30,4 +35,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc{
+    [self.waveView stopAnimation];
+    NSLog(@"%@",[self class]);
+}
 @end
