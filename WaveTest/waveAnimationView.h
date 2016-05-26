@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+typedef NS_ENUM(NSInteger,WaveType) {
+    WaveTypeSine,
+    WaveTypeSawtooth,
+    WaveTypeSquare
+};
 
-@interface waveAnimationView : UIView
-
+@interface WaveAnimationView : UIView
+@property (nonatomic) NSInteger waveCount;
+@property (nonatomic) WaveType type;
 @end

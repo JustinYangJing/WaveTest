@@ -15,7 +15,7 @@
 		1BA8FF4D1CF5B4C8004AD337 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BA8FF4B1CF5B4C8004AD337 /* LaunchScreen.storyboard */; };
 		1BA8FF581CF5B4C8004AD337 /* WaveTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8FF571CF5B4C8004AD337 /* WaveTestTests.m */; };
 		1BA8FF631CF5B4C8004AD337 /* WaveTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8FF621CF5B4C8004AD337 /* WaveTestUITests.m */; };
-		1BA8FF721CF5B586004AD337 /* waveAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8FF711CF5B586004AD337 /* waveAnimationView.m */; };
+		1BA8FF721CF5B586004AD337 /* WaveAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8FF711CF5B586004AD337 /* WaveAnimationView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,8 +52,8 @@
 		1BA8FF5E1CF5B4C8004AD337 /* WaveTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaveTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BA8FF621CF5B4C8004AD337 /* WaveTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WaveTestUITests.m; sourceTree = "<group>"; };
 		1BA8FF641CF5B4C8004AD337 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1BA8FF701CF5B586004AD337 /* waveAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = waveAnimationView.h; sourceTree = "<group>"; };
-		1BA8FF711CF5B586004AD337 /* waveAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = waveAnimationView.m; sourceTree = "<group>"; };
+		1BA8FF701CF5B586004AD337 /* WaveAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaveAnimationView.h; sourceTree = "<group>"; };
+		1BA8FF711CF5B586004AD337 /* WaveAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaveAnimationView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +113,8 @@
 				1BA8FF4B1CF5B4C8004AD337 /* LaunchScreen.storyboard */,
 				1BA8FF4E1CF5B4C8004AD337 /* Info.plist */,
 				1BA8FF3D1CF5B4C8004AD337 /* Supporting Files */,
-				1BA8FF701CF5B586004AD337 /* waveAnimationView.h */,
-				1BA8FF711CF5B586004AD337 /* waveAnimationView.m */,
+				1BA8FF701CF5B586004AD337 /* WaveAnimationView.h */,
+				1BA8FF711CF5B586004AD337 /* WaveAnimationView.m */,
 			);
 			path = WaveTest;
 			sourceTree = "<group>";
@@ -275,7 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BA8FF721CF5B586004AD337 /* waveAnimationView.m in Sources */,
+				1BA8FF721CF5B586004AD337 /* WaveAnimationView.m in Sources */,
 				1BA8FF451CF5B4C8004AD337 /* ViewController.m in Sources */,
 				1BA8FF421CF5B4C8004AD337 /* AppDelegate.m in Sources */,
 				1BA8FF3F1CF5B4C8004AD337 /* main.m in Sources */,
