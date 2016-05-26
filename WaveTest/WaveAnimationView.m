@@ -36,7 +36,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.curLayer = [CAShapeLayer layer];
-        self.curLayer.strokeColor = [UIColor grayColor].CGColor;
+        self.curLayer.strokeColor = [UIColor whiteColor].CGColor;
         self.curLayer.fillColor = nil;
         self.curLayer.lineDashPattern = @[@(frame.size.width-10),@10];
         self.curLayer.lineWidth = 3.;
@@ -70,6 +70,8 @@
     animation.duration = 5;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     animation.removedOnCompletion = NO;
+//    animation.fillMode = kCAFillModeForwards;
+    animation.delegate = self;
     animation.repeatCount = NSIntegerMax;
     [self.curLayer addAnimation:animation forKey:@"animation"];
 }
@@ -262,5 +264,11 @@
 //先给外部提供停止函数？
 -(void)dealloc{
     [self.reDrawThread cancel];
+}
+-(void)animationDidStart:(CAAnimation *)anim{
+    NSLog(@"xxx");
+}
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+    self.curLayer.path = nil;
 }
 @end
